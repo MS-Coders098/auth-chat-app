@@ -1,0 +1,24 @@
+<%- include('./partials/header.ejs') %>
+<link rel="stylesheet" href="/stylesheets/chat.css">
+
+<main class="w-full h-screen bg-red-400 overflow-hidden">
+
+    <div id="chat-messages"
+        class="w-2/3 block p-4 relative h-3/4 bg-red-600 py-3 rounded overflow-auto mx-auto mt-10 mb-3">
+    </div>
+
+    <div id="form" class="w-full ">
+        <form id="messageForm" onsubmit="handleSendMessage(event)"
+            class="mx-auto text-center px-4 ">
+            <input type="text" name="message" id="message"
+                class="text-message" placeholder="Type Message">
+            <button type="submit"
+                class="bg-blue-500 py-2 w-full rounded-lg text-white text-lg font-light px-5 -py-2">Send</button>
+        </form>
+    </div>
+
+</main>
+
+<script src="/javascripts/chat.js"></script>
+
+<%- include('./partials/footer.ejs') %>
