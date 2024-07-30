@@ -94,6 +94,14 @@ input[type="file"] {
         width: 100%;
         max-width: 90%;
     }
+
+    #button-check {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-bottom: 5px;
+    }
 }
 
 @media (max-width: 480px) {
