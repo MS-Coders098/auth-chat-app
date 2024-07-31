@@ -39,7 +39,6 @@ function handleSendMessage(event) {
     event.preventDefault();
     const message = document.getElementById('message').value;
     const user = JSON.parse(localStorage.getItem('user'));
-    console.log(message)
 
     socket.emit("send-message", { message, user });
     document.getElementById('message').value = '';
