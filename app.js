@@ -10,7 +10,12 @@ const MongoStore = require("connect-mongo");
 require('dotenv').config()
 const app = express();
 const server = http.createServer(app)
-const io = socketio(server)
+const io = socketio(server, {
+    connectionStateRecovery: {
+        maxDisconnectionDuration: 2 * 60 * 1000,
+        skipMiddlewares: true,
+      }
+})
 
 // Requiring Database
 require("./config/mongoose-connection")

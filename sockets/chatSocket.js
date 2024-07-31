@@ -14,9 +14,6 @@ module.exports = async (io) => {
         const user = await findUser(socket.request.session.encoded)
         socket.emit("send-user", {user})
 
-        const messages = await Messages.find().populate('user');
-        socket.emit("load-messages", messages);
-
         socket.on("send-message", async (data) => {
             const newMsg = await Messages.create({
                 message: data.message,
@@ -26,16 +23,18 @@ module.exports = async (io) => {
             await user.save();
     
             // Send message to the sender
-            socket.emit("message-sender", { message: data.message, user: data.user });
+            socket.emit("message-sender", { message: data.message, user });
     
             // Broadcast message to all other clients
             socket.broadcast.emit("message-receiver", { message: data.message, user: data.user });
 
-            socket.on("delete-message", (msgId) => {
-                console.log(msgId)
-            })
         });
-    
+
+        socket.on("load-messages", async () => {
+            const messages = await Messages.find().populate('user');
+            socket.emit("messages-loaded", messages);
+        });
+
         socket.on("disconnect", () => {
             // handle disconnect
         });

@@ -6,22 +6,23 @@ socket.on("send-user", (data) => {
     localStorage.setItem("user", JSON.stringify(data.user));
 });
 
-const audio = new Audio()
+document.addEventListener("DOMContentLoaded", function () {
+    // Load messages when the chat window is opened
+    socket.emit("load-messages");
 
-socket.on("load-messages", (messages) => {
-    messages.forEach((msg, index) => {
-        const position = msg.user._id === JSON.parse(localStorage.getItem('user'))._id ? 'right' : 'left';
-        sendMessage(msg.message, position, msg.user, msg._id);
+    socket.on("messages-loaded", (messages) => {
+        messages.forEach((msg, index) => {
+            const position = msg.user._id === JSON.parse(localStorage.getItem('user'))._id ? 'right' : 'left';
+            sendMessage(msg.message, position, msg.user, msg._id);
 
-        if (index === messages.length - 1) {
-            const messageElements = document.querySelectorAll('.message');
-            const lastMessage = messageElements[messageElements.length - 1];
-            lastMessage.scrollIntoView({ behavior: "smooth", block: "end" });
-        }
+            if (index === messages.length - 1) {
+                const messageElements = document.querySelectorAll('.message');
+                const lastMessage = messageElements[messageElements.length - 1];
+                lastMessage.scrollIntoView({ behavior: "smooth", block: "end" });
+            }
+        });
     });
-});
-
-// Handle delete message
+})
 
 // Handle sent message (from self)
 socket.on("message-sender", (data) => {
@@ -38,9 +39,9 @@ function handleSendMessage(event) {
     event.preventDefault();
     const message = document.getElementById('message').value;
     const user = JSON.parse(localStorage.getItem('user'));
+    console.log(message)
 
     socket.emit("send-message", { message, user });
-    audio.play();
     document.getElementById('message').value = '';
 }
 
@@ -80,7 +81,6 @@ function sendMessage(msg, position, user, id) {
 
     messageContainer.appendChild(userDetailsDiv);
     messageContainer.appendChild(paragraph);
-    messageContainer.appendChild(deleteDiv)
 
     document.getElementById('chat-messages').appendChild(messageContainer);
 
